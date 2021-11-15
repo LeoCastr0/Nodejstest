@@ -5,26 +5,41 @@
 // output: [{ team: 'green', points: 40 }, ...]
 
 async function getPlayers(players) {
-    const sortedPlayers = []
+    const ordenedPlayers = []
 
     players.forEach(player => {
         if (player.isActive) {
             const returnObject = {}
             returnObject.team = player.team
             returnObject.points = player.points
-            sortedPlayers.push(returnObject)
+            ordenedPlayers.push(returnObject)
         }
     })
-    sortedPlayers.sort(function (a, b) {
+    ordenedPlayers.sort(function (a, b) {
         if (a.points < b.points) {
             return 1
         }
         if (a.points > b.points) {
             return -1
         }
-        // a must be equal to b
         return 0
     })
+
+    const sortedPlayers = ordenedPlayers.reduce((obj, {team, points}) => {
+        if (!obj[team]) obj[team] = []
+        obj[team].push(points)
+        return obj
+    }, {})
+
+    // ordenedPlayers.forEach(function (a) {
+    //     // if (!this[a.team] && !this[a.points]) {
+    //     //     this[a.team] = {team: a.team, points: a.points}
+    //     //     sortedPlayers.Push(this[a.points])
+    //     // }
+    //     this[a.team].points += a.points
+    // }, Object.create(null))
+
+    //return ordenedPlayers
     return sortedPlayers
 }
 
