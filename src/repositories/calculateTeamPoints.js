@@ -15,6 +15,7 @@ async function getPlayers(players) {
             ordenedPlayers.push(returnObject)
         }
     })
+
     ordenedPlayers.sort(function (a, b) {
         if (a.points < b.points) {
             return 1
@@ -25,22 +26,15 @@ async function getPlayers(players) {
         return 0
     })
 
-    const sortedPlayers = ordenedPlayers.reduce((obj, {team, points}) => {
-        if (!obj[team]) obj[team] = []
-        obj[team].push(points)
-        return obj
-    }, {})
+    const sum = items => {
+        const total = items.reduce((newArr, {team, points}) => {
+            newArr[team] = (newArr[team] || 0) + points
+            return newArr
+        }, {})
+        return Object.keys(total).map(team => ({team, points: total[team]}))
+    }
 
-    // ordenedPlayers.forEach(function (a) {
-    //     // if (!this[a.team] && !this[a.points]) {
-    //     //     this[a.team] = {team: a.team, points: a.points}
-    //     //     sortedPlayers.Push(this[a.points])
-    //     // }
-    //     this[a.team].points += a.points
-    // }, Object.create(null))
-
-    //return ordenedPlayers
-    return sortedPlayers
+    return sum(ordenedPlayers)
 }
 
 export default {getPlayers}
